@@ -26,7 +26,7 @@ post.save(function(err,rtn){
 })
 
 router.get('/postlist',function(req,res){
-  Post.find({}),populate('author').exec(function(err,rtn) {
+  Post.find({}).populate('author').exec(function(err,rtn) {
     // body...
     if(err) throw err;
     console.log(rtn);

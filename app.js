@@ -11,6 +11,9 @@ var indexRouter = require('./routes/index');
 
 var usersRouter = require('./routes/users');
 var postsRouter=require('./routes/posts');
+var apiuser=require('./api/routes/users');
+var apipost=require('./api/routes/posts');
+var apiadmin=require('./api/routes/admin');
 var app = express();
 
 // view engine setup
@@ -19,7 +22,7 @@ app.set('view engine', 'ejs');
 mongoose.connect('mongodb+srv://mhwayei:mhwayei@node005js-rjpxi.mongodb.net/test?retryWrites=true&w=majority');
 var db=mongoose.connection;
 db.on('error',console.error.bind(console,'Mongodb connection error'));
-
+app.use('/api/users',apiuser);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,10 +34,14 @@ resave:false,
 saveUninitialized:true
 
 }));
+
 app.use(function(req,res,next){
   res.locals.user=req.session.user;
   next();
 })
+app.use('/api/',apiadmin);
+app.use('/api/users',apiuser);
+app.use('/api/posts',apipost)
 app.use('/', indexRouter);
 app.use(function(req,res,next){
   if(req.session.user){
